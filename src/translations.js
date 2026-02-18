@@ -45,7 +45,7 @@ export const translations = {
         "contact.error": "Failed to send message. Please try again.",
 
         // Footer
-        "footer.rights": "\u00a9 2026 Ethan. All rights reserved.",
+        "footer.rights": "\u00a9 2026 Ethan Legris.",
     },
     fr: {
         // Nav
@@ -93,6 +93,6 @@ export const translations = {
         "contact.error": "\u00c9chec de l'envoi. Veuillez r\u00e9essayer.",
 
         // Footer
-        "footer.rights": "\u00a9 2026 Ethan. Tous droits r\u00e9serv\u00e9s.",
+        "footer.rights": "\u00a9 2026 Ethan Legris.",
     }
 };
