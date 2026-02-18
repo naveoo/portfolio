@@ -7,7 +7,6 @@ A modern, interactive developer portfolio built with **Vanilla JavaScript** and 
 ![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?logo=vite&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript&logoColor=black)
 ![CSS3](https://img.shields.io/badge/CSS3-Custom_Properties-1572B6?logo=css3&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green)
 
 </div>
 
