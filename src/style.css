@@ -608,32 +608,51 @@ footer p {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  .hero-content h1 {
-    font-size: 2.5rem;
+
+  /* Navbar */
+  #navbar {
+    padding: 1rem 1.2rem;
   }
 
   .nav-links {
     display: none;
     position: fixed;
-    top: 60px;
+    top: 56px;
     left: 0;
     width: 100%;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    padding: 2rem 0;
-    background: var(--nav-bg);
-    backdrop-filter: blur(10px);
+    gap: 0;
+    padding: 0;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--card-border);
     transform: none;
-    left: 0;
+    z-index: 999;
+  }
+
+  .nav-links.nav-open {
+    display: flex;
+  }
+
+  .nav-links li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 1rem;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .hamburger {
     display: block;
-    width: 30px;
+    width: 28px;
     height: 20px;
     position: relative;
+    margin-left: 1rem;
   }
 
   .hamburger span {
@@ -655,5 +674,107 @@ footer p {
 
   .hamburger span:last-child {
     bottom: 0;
+  }
+
+  .lang-toggle {
+    margin-left: auto;
+  }
+
+  /* Hero */
+  #hero {
+    padding: 0 1.2rem;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  .hero-content .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .cta-buttons .btn {
+    width: 100%;
+    max-width: 260px;
+    text-align: center;
+  }
+
+  /* Sections */
+  section {
+    padding: 4rem 1.2rem;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+  }
+
+  .container {
+    padding: 0;
+  }
+
+  /* About */
+  .about-text {
+    font-size: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  /* Skills */
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .skill-category {
+    padding: 1.5rem;
+  }
+
+  /* Projects */
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .github-profile {
+    margin-bottom: 1.5rem;
+  }
+
+  .project-card {
+    padding: 1.2rem;
+  }
+
+  .project-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .project-links {
+    flex-wrap: wrap;
+  }
+
+  .github-cta {
+    margin-top: 1.5rem;
+  }
+
+  /* Contact */
+  .contact-form {
+    padding: 0 0.5rem;
+  }
+
+  input,
+  textarea {
+    font-size: 16px;
+    /* Prevents iOS zoom on focus */
+  }
+
+  /* Footer */
+  footer {
+    padding: 3rem 1.2rem;
   }
 }

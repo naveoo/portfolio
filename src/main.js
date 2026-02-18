@@ -57,23 +57,13 @@ const navLinks = document.querySelector('.nav-links');
 const navbar = document.getElementById('navbar');
 
 hamburger.addEventListener('click', () => {
-  navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-  if (navLinks.style.display === 'flex') {
-    navLinks.style.flexDirection = 'column';
-    navLinks.style.position = 'absolute';
-    navLinks.style.top = '100%';
-    navLinks.style.left = '0';
-    navLinks.style.width = '100%';
-    navLinks.style.backgroundColor = 'var(--nav-bg)';
-    navLinks.style.padding = '1rem';
-    navLinks.style.borderBottom = '1px solid var(--card-border)';
-  }
+  navLinks.classList.toggle('nav-open');
 });
 
 document.querySelectorAll('.nav-links a').forEach(link => {
   link.addEventListener('click', () => {
     if (window.innerWidth <= 768) {
-      navLinks.style.display = 'none';
+      navLinks.classList.remove('nav-open');
     }
   });
 });
