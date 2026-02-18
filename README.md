@@ -43,8 +43,8 @@ A modern, interactive developer portfolio built with **Vanilla JavaScript** and 
 
 ```bash
 # Clone the repository
-git clone https://github.com/naveoo/Potfolio.git
-cd Potfolio
+git clone https://github.com/naveoo/portfolio.git
+cd portfolio
 
 # Install dependencies
 npm install
@@ -68,7 +68,7 @@ npm run preview  # Preview the production build locally
 ## 📁 Project Structure
 
 ```
-Potfolio/
+portfolio/
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml        # GitHub Actions CI/CD
