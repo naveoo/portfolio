@@ -64,13 +64,15 @@ body {
   color: var(--text-color);
   line-height: 1.7;
   overflow-x: hidden;
-  cursor: none;
 }
 
-@media (pointer: coarse) {
-  body {
-    cursor: auto;
-  }
+body.custom-cursor,
+body.custom-cursor a,
+body.custom-cursor button,
+body.custom-cursor .btn,
+body.custom-cursor .hamburger,
+body.custom-cursor .lang-toggle {
+  cursor: none !important;
 }
 
 body::before {
@@ -182,6 +184,9 @@ body::after {
   transform: translate(-50%, -50%);
   transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background 0.3s ease, opacity 0.3s ease;
   opacity: 0;
+  will-change: left, top;
+  left: -100px;
+  top: -100px;
 }
 
 .cursor-dot {
@@ -195,6 +200,9 @@ body::after {
   transform: translate(-50%, -50%);
   opacity: 0;
   transition: opacity 0.3s ease;
+  will-change: left, top;
+  left: -100px;
+  top: -100px;
 }
 
 .cursor.cursor--hover {
@@ -291,13 +299,6 @@ a {
   text-decoration: none;
   color: inherit;
   transition: var(--transition-smooth);
-  cursor: none;
-}
-
-@media (pointer: coarse) {
-  a {
-    cursor: auto;
-  }
 }
 
 ul {
@@ -316,19 +317,13 @@ ul {
   border-radius: 12px;
   font-weight: 600;
   font-size: 0.95rem;
-  cursor: none;
+  cursor: pointer;
   transition: var(--transition-smooth);
   border: none;
   position: relative;
   font-family: var(--font-main);
   letter-spacing: 0.01em;
   overflow: hidden;
-}
-
-@media (pointer: coarse) {
-  .btn {
-    cursor: pointer;
-  }
 }
 
 .btn::after {
@@ -660,11 +655,13 @@ ul {
   height: 100%;
   z-index: 1;
   overflow: hidden;
+  pointer-events: none;
 }
 
 #hero-canvas {
   width: 100%;
   height: 100%;
+  pointer-events: none;
 }
 
 .hero-orb {
@@ -811,7 +808,6 @@ section {
   overflow: hidden;
 }
 
-/* Bordure animée sur stat-card via pseudo-element rotatif */
 .stat-card::before {
   content: '';
   position: absolute;
@@ -895,7 +891,6 @@ section {
   overflow: hidden;
 }
 
-/* Bordure animée sur skill-category */
 .skill-category::before {
   content: '';
   position: absolute;
@@ -1123,7 +1118,6 @@ section {
   will-change: transform;
 }
 
-/* Bordure lumineuse animée */
 .project-card::before {
   content: '';
   position: absolute;
@@ -1424,18 +1418,12 @@ footer p {
   border: 1px solid var(--glass-border);
   border-radius: 10px;
   color: var(--text-color);
-  cursor: none;
+  cursor: pointer;
   font-family: var(--font-main);
   font-size: 0.82rem;
   font-weight: 600;
   transition: var(--transition-smooth);
   backdrop-filter: var(--glass-blur);
-}
-
-@media (pointer: coarse) {
-  .lang-toggle {
-    cursor: pointer;
-  }
 }
 
 .lang-toggle:hover {
@@ -1519,11 +1507,16 @@ footer p {
   }
 }
 
-/* Clip-path reveal pour les titres */
 .hidden {
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s var(--ease-out-expo);
+  transform: translateY(20px);
+  transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
+}
+
+.section-title.hidden,
+.section-subtitle.hidden {
+  transform: translateY(14px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
 }
 
 .hidden.clip-reveal {
