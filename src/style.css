@@ -98,7 +98,7 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
   opacity: 0.028;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 1;
   animation: grain-shift 8s steps(10, end) infinite;
 }
 
@@ -175,13 +175,13 @@ body::after {
   position: fixed;
   width: 36px;
   height: 36px;
-  border: 1.5px solid rgba(100, 255, 218, 0.6);
+  border: 1.5px solid rgba(100, 255, 218, 0.7);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
   transform: translate(-50%, -50%);
   transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background 0.3s ease, opacity 0.3s ease;
-  mix-blend-mode: difference;
+  opacity: 0;
 }
 
 .cursor-dot {
@@ -193,6 +193,8 @@ body::after {
   pointer-events: none;
   z-index: 99999;
   transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .cursor.cursor--hover {
@@ -1571,18 +1573,19 @@ footer p {
   }
 
   .nav-links {
+    display: flex;
     position: fixed;
-    top: 56px;
+    top: 0;
+    padding-top: 64px;
     left: 0;
     width: 100%;
     flex-direction: column;
     align-items: center;
     gap: 0;
-    padding: 0.5rem 0;
-    background: rgba(6, 6, 17, 0.95);
+    background: rgba(6, 6, 17, 0.97);
     backdrop-filter: blur(24px);
     border-bottom: 1px solid var(--glass-border);
-    z-index: 999;
+    z-index: 998;
     max-height: 0;
     opacity: 0;
     overflow: hidden;
@@ -1591,7 +1594,8 @@ footer p {
   }
 
   .nav-links.nav-open {
-    max-height: 400px;
+    display: flex;
+    max-height: 500px;
     opacity: 1;
     pointer-events: auto;
   }

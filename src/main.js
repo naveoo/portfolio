@@ -537,7 +537,7 @@ function renderRepos() {
 async function fetchGitHubRepos() {
   try {
     const response = await fetch(
-      `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`,
+      `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=12`,
       {
         headers: {
           'Accept': 'application/vnd.github+json'
@@ -545,15 +545,25 @@ async function fetchGitHubRepos() {
       }
     );
 
-    if (response.status === 403) {
-      console.warn('GitHub API rate limit reached');
-      reposContainer.innerHTML = `<p>${translations[currentLang]['projects.error']}</p>`;
+    if (response.status === 403 || response.status === 429) {
+      const rateLimitReset = response.headers.get('X-RateLimit-Reset');
+      console.warn('GitHub API rate limit reached. Resets at:', rateLimitReset ? new Date(rateLimitReset * 1000) : 'unknown');
+      reposContainer.innerHTML = `
+        <div style="grid-column:1/-1; text-align:center; padding:3rem;">
+          <p style="color:var(--text-secondary); font-family:var(--font-mono); margin-bottom:1rem;">
+            ⚠️ GitHub API rate limit reached.<br>
+            <a href="https://github.com/${GITHUB_USERNAME}?tab=repositories" target="_blank" style="color:var(--accent-primary)">View repos directly on GitHub →</a>
+          </p>
+        </div>`;
       return;
     }
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
     const repos = await response.json();
-    cachedRepos = repos.filter(r => r.name !== GITHUB_USERNAME && !r.fork);
+    cachedRepos = repos
+      .filter(r => r.name !== GITHUB_USERNAME && !r.fork)
+      .sort((a, b) => b.stargazers_count - a.stargazers_count)
+      .slice(0, 6);
 
     renderRepos();
   } catch (err) {
