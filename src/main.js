@@ -38,8 +38,11 @@ function changeLanguage(lang) {
     }
   }
 
-  // Update typing effect roles when language changes
   updateTypingRoles();
+
+  if (typeof renderRepos === 'function' && cachedRepos.length > 0) {
+    renderRepos();
+  }
 }
 
 const langToggle = document.getElementById('lang-toggle');
@@ -164,7 +167,7 @@ function typeEffect() {
   let delay = isDeleting ? 40 : 80;
 
   if (!isDeleting && charIndex === currentRole.length) {
-    delay = 2000; // pause at end
+    delay = 2000;
     isDeleting = true;
   } else if (isDeleting && charIndex === 0) {
     isDeleting = false;
@@ -209,7 +212,6 @@ class Particle {
     this.speedX = this.baseSpeedX;
     this.speedY = this.baseSpeedY;
 
-    // Random color from palette
     const colors = [
       'rgba(100, 255, 218, 0.4)',
       'rgba(91, 141, 238, 0.3)',
@@ -323,7 +325,6 @@ const observer = new IntersectionObserver((entries, obs) => {
   });
 }, observerOptions);
 
-// Observe elements for scroll reveal
 const scrollElements = document.querySelectorAll('.section-title, .section-subtitle, .skill-category, .about-text, .stat-card, .about-stats');
 scrollElements.forEach((el, i) => {
   el.classList.add('hidden');
@@ -342,7 +343,6 @@ function animateCounter(el) {
   function update(now) {
     const elapsed = now - start;
     const progress = Math.min(elapsed / duration, 1);
-    // Ease out quad
     const ease = 1 - (1 - progress) * (1 - progress);
     const current = Math.floor(ease * target);
     el.textContent = current + '+';
@@ -375,47 +375,61 @@ if (statsSection) {
 // ==========================================
 const GITHUB_USERNAME = 'naveoo';
 const reposContainer = document.getElementById('github-repos');
+let cachedRepos = [];
+
+function renderRepos() {
+  if (cachedRepos.length === 0) {
+    reposContainer.innerHTML = `<p>${translations[currentLang]['projects.error']}</p>`;
+    return;
+  }
+
+  reposContainer.innerHTML = cachedRepos.map(repo => `
+    <article class="project-card">
+      <div class="project-header">
+        <h3>${repo.name}</h3>
+        ${repo.stargazers_count > 0 ? `<span class="stars">⭐ ${repo.stargazers_count}</span>` : ''}
+      </div>
+      <p class="project-desc">${repo.description || translations[currentLang]['projects.noDesc']}</p>
+      <div class="project-meta">
+        ${repo.language ? `<span class="project-lang"><span class="lang-dot" style="background:${getLangColor(repo.language)}"></span>${repo.language}</span>` : ''}
+        ${repo.topics && repo.topics.length > 0 ? `<div class="project-tags">${repo.topics.slice(0, 4).map(t => `<span>${t}</span>`).join('')}</div>` : ''}
+      </div>
+      <div class="project-links">
+        <a href="${repo.html_url}" target="_blank">${translations[currentLang]['project.code']}</a>
+        ${repo.homepage ? `<a href="${repo.homepage}" target="_blank">Demo</a>` : ''}
+      </div>
+    </article>
+  `).join('');
+
+  document.querySelectorAll('.project-card').forEach((card, i) => {
+    card.classList.add('hidden');
+    card.style.transitionDelay = `${i * 0.1}s`;
+    observer.observe(card);
+  });
+}
 
 async function fetchGitHubRepos() {
   try {
     const response = await fetch(
-      `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`
+      `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`,
+      {
+        headers: {
+          'Accept': 'application/vnd.github+json'
+        }
+      }
     );
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const repos = await response.json();
 
-    const filtered = repos.filter(r => r.name !== GITHUB_USERNAME);
-
-    if (filtered.length === 0) {
+    if (response.status === 403) {
+      console.warn('GitHub API rate limit reached');
       reposContainer.innerHTML = `<p>${translations[currentLang]['projects.error']}</p>`;
       return;
     }
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-    reposContainer.innerHTML = filtered.map(repo => `
-      <article class="project-card">
-        <div class="project-header">
-          <h3>${repo.name}</h3>
-          ${repo.stargazers_count > 0 ? `<span class="stars">⭐ ${repo.stargazers_count}</span>` : ''}
-        </div>
-        <p class="project-desc">${repo.description || translations[currentLang]['projects.noDesc']}</p>
-        <div class="project-meta">
-          ${repo.language ? `<span class="project-lang"><span class="lang-dot" style="background:${getLangColor(repo.language)}"></span>${repo.language}</span>` : ''}
-          ${repo.topics && repo.topics.length > 0 ? `<div class="project-tags">${repo.topics.slice(0, 4).map(t => `<span>${t}</span>`).join('')}</div>` : ''}
-        </div>
-        <div class="project-links">
-          <a href="${repo.html_url}" target="_blank">${translations[currentLang]['project.code']}</a>
-          ${repo.homepage ? `<a href="${repo.homepage}" target="_blank">Demo</a>` : ''}
-        </div>
-      </article>
-    `).join('');
+    const repos = await response.json();
+    cachedRepos = repos.filter(r => r.name !== GITHUB_USERNAME && !r.fork);
 
-    // Staggered reveal for project cards
-    document.querySelectorAll('.project-card').forEach((card, i) => {
-      card.classList.add('hidden');
-      card.style.transitionDelay = `${i * 0.1}s`;
-      observer.observe(card);
-    });
-
+    renderRepos();
   } catch (err) {
     console.error('GitHub API error:', err);
     reposContainer.innerHTML = `<p>${translations[currentLang]['projects.error']}</p>`;
