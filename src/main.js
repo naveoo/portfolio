@@ -1,6 +1,11 @@
 import './style.css'
 import { translations } from './translations.js'
 
+// Variables globales déclarées avant tout appel (évite le TDZ en production)
+const GITHUB_USERNAME = 'naveoo';
+const reposContainer = document.getElementById('github-repos');
+let cachedRepos = [];
+
 // ==========================================
 // LANGUAGE / i18n
 // ==========================================
@@ -489,9 +494,7 @@ if (statsSection) {
 // ==========================================
 // GITHUB REPOS INTEGRATION
 // ==========================================
-const GITHUB_USERNAME = 'naveoo';
-const reposContainer = document.getElementById('github-repos');
-let cachedRepos = [];
+// (GITHUB_USERNAME, reposContainer, cachedRepos declared at top of file)
 
 function renderRepos() {
   if (cachedRepos.length === 0) {
