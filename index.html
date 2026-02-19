@@ -57,7 +57,22 @@
         <div class="hero-background">
           <div class="hero-orb hero-orb--cyan"></div>
           <div class="hero-orb hero-orb--purple"></div>
+          <div class="hero-orb hero-orb--blue"></div>
           <canvas id="hero-canvas"></canvas>
+        </div>
+        <div class="hero-grid"></div>
+        <div class="hero-diagonal">
+          <svg viewBox="0 0 1440 800" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="800" x2="1440" y2="0" stroke="url(#diag-grad)" stroke-width="1" />
+            <line x1="-200" y1="800" x2="1240" y2="0" stroke="url(#diag-grad)" stroke-width="0.5" opacity="0.4" />
+            <defs>
+              <linearGradient id="diag-grad" x1="0" y1="1" x2="1" y2="0" gradientUnits="objectBoundingBox">
+                <stop offset="0%" stop-color="#64ffda" stop-opacity="0.3" />
+                <stop offset="50%" stop-color="#5b8dee" stop-opacity="0.15" />
+                <stop offset="100%" stop-color="#a855f7" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
         <a href="#about" class="scroll-down">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -103,6 +118,7 @@
           <p class="section-subtitle" data-i18n="skills.subtitle">Technologies I work with</p>
           <div class="skills-grid">
             <div class="skill-category">
+              <div class="skill-accent"></div>
               <h3><span class="skill-icon">💻</span> <span data-i18n="skills.languages">Languages</span></h3>
               <div class="skill-tags">
                 <span>Python</span>
@@ -115,6 +131,7 @@
               </div>
             </div>
             <div class="skill-category">
+              <div class="skill-accent"></div>
               <h3><span class="skill-icon">🎨</span> <span data-i18n="skills.frontend">Frontend</span></h3>
               <div class="skill-tags">
                 <span>HTML5</span>
@@ -126,6 +143,7 @@
               </div>
             </div>
             <div class="skill-category">
+              <div class="skill-accent"></div>
               <h3><span class="skill-icon">⚙️</span> <span data-i18n="skills.backend">Backend</span></h3>
               <div class="skill-tags">
                 <span>Django</span>
@@ -135,6 +153,7 @@
               </div>
             </div>
             <div class="skill-category">
+              <div class="skill-accent"></div>
               <h3><span class="skill-icon">🗄️</span> <span data-i18n="skills.databases">Databases</span></h3>
               <div class="skill-tags">
                 <span>MySQL</span>
@@ -145,6 +164,7 @@
               </div>
             </div>
             <div class="skill-category">
+              <div class="skill-accent"></div>
               <h3><span class="skill-icon">🤖</span> <span data-i18n="skills.ai">AI & ML</span></h3>
               <div class="skill-tags">
                 <span>Ollama</span>
@@ -152,6 +172,7 @@
               </div>
             </div>
             <div class="skill-category">
+              <div class="skill-accent"></div>
               <h3><span class="skill-icon">🚀</span> <span data-i18n="skills.devops">DevOps & Tools</span></h3>
               <div class="skill-tags">
                 <span>Git / GitHub</span>

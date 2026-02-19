@@ -181,6 +181,15 @@ function typeEffect() {
 typeEffect();
 
 // ==========================================
+// SECTION DECORATIVE NUMBERS
+// ==========================================
+const sectionNumbers = ['01', '02', '03', '04'];
+const sectionTitles = document.querySelectorAll('#about .section-title, #skills .section-title, #projects .section-title, #contact .section-title');
+sectionTitles.forEach((title, i) => {
+  title.setAttribute('data-section-num', sectionNumbers[i] || '0' + (i + 1));
+});
+
+// ==========================================
 // INTERACTIVE PARTICLE CANVAS
 // ==========================================
 const canvas = document.getElementById('hero-canvas');
@@ -213,16 +222,15 @@ class Particle {
     this.speedY = this.baseSpeedY;
 
     const colors = [
-      'rgba(100, 255, 218, 0.4)',
-      'rgba(91, 141, 238, 0.3)',
-      'rgba(168, 85, 247, 0.3)',
-      'rgba(100, 255, 218, 0.2)',
+      'rgba(100, 255, 218, 0.5)',
+      'rgba(91, 141, 238, 0.4)',
+      'rgba(168, 85, 247, 0.4)',
+      'rgba(100, 255, 218, 0.25)',
     ];
     this.color = colors[Math.floor(Math.random() * colors.length)];
   }
 
   update() {
-    // Mouse interaction: push particles away
     if (mouse.x !== null && mouse.y !== null) {
       const dx = this.x - mouse.x;
       const dy = this.y - mouse.y;
@@ -231,8 +239,8 @@ class Particle {
       if (dist < mouse.radius) {
         const force = (mouse.radius - dist) / mouse.radius;
         const angle = Math.atan2(dy, dx);
-        this.speedX = this.baseSpeedX + Math.cos(angle) * force * 2;
-        this.speedY = this.baseSpeedY + Math.sin(angle) * force * 2;
+        this.speedX = this.baseSpeedX + Math.cos(angle) * force * 2.5;
+        this.speedY = this.baseSpeedY + Math.sin(angle) * force * 2.5;
       } else {
         this.speedX += (this.baseSpeedX - this.speedX) * 0.05;
         this.speedY += (this.baseSpeedY - this.speedY) * 0.05;
@@ -276,7 +284,7 @@ function connectParticles() {
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       if (dist < maxDist) {
-        const opacity = 0.12 * (1 - dist / maxDist);
+        const opacity = 0.15 * (1 - dist / maxDist);
         ctx.strokeStyle = `rgba(100, 255, 218, ${opacity})`;
         ctx.lineWidth = 0.6;
         ctx.beginPath();
@@ -306,6 +314,114 @@ window.addEventListener('resize', () => {
 
 initParticles();
 animateParticles();
+
+// ==========================================
+// CUSTOM CURSOR
+// ==========================================
+const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+if (!isTouch) {
+  const cursorEl = document.createElement('div');
+  cursorEl.className = 'cursor';
+  const cursorDot = document.createElement('div');
+  cursorDot.className = 'cursor-dot';
+  document.body.appendChild(cursorEl);
+  document.body.appendChild(cursorDot);
+
+  let cursorX = -100, cursorY = -100;
+  let dotX = -100, dotY = -100;
+  let cursorVisible = false;
+
+  document.addEventListener('mousemove', (e) => {
+    cursorX = e.clientX;
+    cursorY = e.clientY;
+    if (!cursorVisible) {
+      cursorEl.style.opacity = '1';
+      cursorDot.style.opacity = '1';
+      cursorVisible = true;
+    }
+  });
+
+  document.addEventListener('mouseleave', () => {
+    cursorEl.style.opacity = '0';
+    cursorDot.style.opacity = '0';
+    cursorVisible = false;
+  });
+
+  function animateCursor() {
+    dotX += (cursorX - dotX) * 1;
+    dotY += (cursorY - dotY) * 1;
+    cursorEl.style.left = cursorX + 'px';
+    cursorEl.style.top = cursorY + 'px';
+    cursorDot.style.left = dotX + 'px';
+    cursorDot.style.top = dotY + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  const hoverTargets = document.querySelectorAll('a, button, .skill-tags span, .project-card, .stat-card');
+  hoverTargets.forEach(el => {
+    el.addEventListener('mouseenter', () => cursorEl.classList.add('cursor--hover'));
+    el.addEventListener('mouseleave', () => cursorEl.classList.remove('cursor--hover'));
+  });
+
+  document.addEventListener('mousedown', () => cursorEl.classList.add('cursor--click'));
+  document.addEventListener('mouseup', () => cursorEl.classList.remove('cursor--click'));
+
+  const magneticBtns = document.querySelectorAll('.btn');
+  magneticBtns.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const dx = (e.clientX - centerX) * 0.25;
+      const dy = (e.clientY - centerY) * 0.25;
+      btn.style.transform = `translate(${dx}px, ${dy}px) translateY(-3px)`;
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
+  });
+}
+
+// ==========================================
+// 3D TILT EFFECT ON PROJECT CARDS
+// ==========================================
+function initCardTilt() {
+  const cards = document.querySelectorAll('.project-card');
+  cards.forEach(card => {
+    // Inject shine layer
+    if (!card.querySelector('.card-shine')) {
+      const shine = document.createElement('div');
+      shine.className = 'card-shine';
+      card.appendChild(shine);
+    }
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -8;
+      const rotateY = ((x - centerX) / centerX) * 8;
+
+      card.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+      card.style.transition = 'box-shadow 0.1s, border-color 0.4s';
+
+      const pctX = (x / rect.width) * 100;
+      const pctY = (y / rect.height) * 100;
+      card.style.setProperty('--mouse-x', `${pctX}%`);
+      card.style.setProperty('--mouse-y', `${pctY}%`);
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.style.transition = 'all 0.5s var(--ease-out-expo)';
+    });
+  });
+}
 
 // ==========================================
 // SCROLL REVEAL (Intersection Observer)
@@ -406,6 +522,16 @@ function renderRepos() {
     card.style.transitionDelay = `${i * 0.1}s`;
     observer.observe(card);
   });
+
+  initCardTilt();
+
+  if (!isTouch) {
+    const newCards = document.querySelectorAll('.project-card');
+    newCards.forEach(el => {
+      el.addEventListener('mouseenter', () => document.querySelector('.cursor')?.classList.add('cursor--hover'));
+      el.addEventListener('mouseleave', () => document.querySelector('.cursor')?.classList.remove('cursor--hover'));
+    });
+  }
 }
 
 async function fetchGitHubRepos() {
