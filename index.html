@@ -5,16 +5,20 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/logo.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio</title>
+  <meta name="description"
+    content="Ethan Legris — Python & Web Developer. Building modern web applications and scalable solutions." />
+  <title>Ethan Legris | Developer Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
 </head>
 
 <body>
   <div id="app">
     <nav id="navbar">
-      <div class="logo">Dev.Portfolio</div>
+      <div class="logo">E.L</div>
       <ul class="nav-links">
         <li><a href="#hero" class="active" data-i18n="nav.home">Home</a></li>
         <li><a href="#about" data-i18n="nav.about">About</a></li>
@@ -36,15 +40,23 @@
     <main>
       <section id="hero">
         <div class="hero-content">
-          <h1 class="typing-effect"><span data-i18n="hero.greeting">Hi, I'm </span><span class="highlight">Ethan</span>
-          </h1>
+          <div class="hero-badge">
+            <span class="badge-dot"></span>
+            <span data-i18n="hero.badge">Available for projects</span>
+          </div>
+          <h1><span data-i18n="hero.greeting">Hi, I'm </span><span class="highlight">Ethan</span></h1>
           <p class="subtitle" data-i18n="hero.subtitle">Python & Web Developer</p>
+          <div class="typing-wrapper">
+            <span id="typing-text" class="typing-text"></span><span class="typing-cursor"></span>
+          </div>
           <div class="cta-buttons">
             <a href="#projects" class="btn primary" data-i18n="hero.cta.work">View Work</a>
             <a href="#contact" class="btn secondary" data-i18n="hero.cta.contact">Contact Me</a>
           </div>
         </div>
         <div class="hero-background">
+          <div class="hero-orb hero-orb--cyan"></div>
+          <div class="hero-orb hero-orb--purple"></div>
           <canvas id="hero-canvas"></canvas>
         </div>
         <a href="#about" class="scroll-down">
@@ -58,6 +70,7 @@
       <section id="about">
         <div class="container">
           <h2 class="section-title" data-i18n="about.title">About Me</h2>
+          <p class="section-subtitle" data-i18n="about.subtitle">Passionate about building things that matter</p>
           <div class="about-content">
             <div class="about-text">
               <p data-i18n="about.text">
@@ -66,6 +79,20 @@
                 I enjoy turning complex ideas into structured, maintainable systems that stand the test of time.
               </p>
             </div>
+            <div class="about-stats">
+              <div class="stat-card">
+                <div class="stat-number" data-count="3">0+</div>
+                <div class="stat-label" data-i18n="about.stat.years">Years Coding</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" data-count="10">0+</div>
+                <div class="stat-label" data-i18n="about.stat.projects">Projects Built</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" data-count="7">0+</div>
+                <div class="stat-label" data-i18n="about.stat.languages">Languages</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -73,9 +100,10 @@
       <section id="skills">
         <div class="container">
           <h2 class="section-title" data-i18n="skills.title">Skills</h2>
+          <p class="section-subtitle" data-i18n="skills.subtitle">Technologies I work with</p>
           <div class="skills-grid">
             <div class="skill-category">
-              <h3 data-i18n="skills.languages">Languages</h3>
+              <h3><span class="skill-icon">💻</span> <span data-i18n="skills.languages">Languages</span></h3>
               <div class="skill-tags">
                 <span>Python</span>
                 <span>JavaScript (ES6+)</span>
@@ -87,7 +115,7 @@
               </div>
             </div>
             <div class="skill-category">
-              <h3 data-i18n="skills.frontend">Frontend</h3>
+              <h3><span class="skill-icon">🎨</span> <span data-i18n="skills.frontend">Frontend</span></h3>
               <div class="skill-tags">
                 <span>HTML5</span>
                 <span>CSS3</span>
@@ -98,7 +126,7 @@
               </div>
             </div>
             <div class="skill-category">
-              <h3 data-i18n="skills.backend">Backend</h3>
+              <h3><span class="skill-icon">⚙️</span> <span data-i18n="skills.backend">Backend</span></h3>
               <div class="skill-tags">
                 <span>Django</span>
                 <span>Flask</span>
@@ -107,7 +135,7 @@
               </div>
             </div>
             <div class="skill-category">
-              <h3 data-i18n="skills.databases">Databases</h3>
+              <h3><span class="skill-icon">🗄️</span> <span data-i18n="skills.databases">Databases</span></h3>
               <div class="skill-tags">
                 <span>MySQL</span>
                 <span>PostgreSQL</span>
@@ -117,14 +145,14 @@
               </div>
             </div>
             <div class="skill-category">
-              <h3 data-i18n="skills.ai">AI & ML</h3>
+              <h3><span class="skill-icon">🤖</span> <span data-i18n="skills.ai">AI & ML</span></h3>
               <div class="skill-tags">
                 <span>Ollama</span>
                 <span>LLM Integration</span>
               </div>
             </div>
             <div class="skill-category">
-              <h3 data-i18n="skills.devops">DevOps & Tools</h3>
+              <h3><span class="skill-icon">🚀</span> <span data-i18n="skills.devops">DevOps & Tools</span></h3>
               <div class="skill-tags">
                 <span>Git / GitHub</span>
                 <span>Docker</span>
@@ -140,6 +168,7 @@
       <section id="projects">
         <div class="container">
           <h2 class="section-title" data-i18n="projects.title">Featured Projects</h2>
+          <p class="section-subtitle" data-i18n="projects.subtitle">Some things I've built recently</p>
           <div class="github-profile">
             <a href="https://github.com/naveoo" target="_blank" class="github-link">
               <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
@@ -162,17 +191,19 @@
       <section id="contact">
         <div class="container">
           <h2 class="section-title" data-i18n="contact.title">Get In Touch</h2>
+          <p class="section-subtitle" data-i18n="contact.subtitle">Have a project in mind? Let's talk</p>
           <form id="contact-form" class="contact-form">
             <div class="form-group">
-              <input type="text" id="name" name="name" required data-i18n-placeholder="contact.name" placeholder="Name">
+              <input type="text" id="name" name="name" required placeholder=" ">
+              <label for="name" data-i18n="contact.name">Name</label>
             </div>
             <div class="form-group">
-              <input type="email" id="email" name="email" required data-i18n-placeholder="contact.email"
-                placeholder="Email">
+              <input type="email" id="email" name="email" required placeholder=" ">
+              <label for="email" data-i18n="contact.email">Email</label>
             </div>
             <div class="form-group">
-              <textarea id="message" name="message" rows="5" required data-i18n-placeholder="contact.message"
-                placeholder="Message"></textarea>
+              <textarea id="message" name="message" rows="5" required placeholder=" "></textarea>
+              <label for="message" data-i18n="contact.message">Message</label>
             </div>
             <button type="submit" class="btn primary" data-i18n="contact.send">Send Message</button>
             <div id="form-status" class="form-status"></div>
@@ -185,8 +216,18 @@
       <div class="container">
         <p data-i18n="footer.rights">&copy; 2026 Ethan Legris.</p>
         <div class="social-links">
-          <a href="https://github.com/naveoo" aria-label="GitHub">GH</a>
-          <a href="https://www.instagram.com/etha.anl?igsh=ZmE5bnJidW93MTV2" aria-label="Instagram">IN</a>
+          <a href="https://github.com/naveoo" target="_blank" aria-label="GitHub">
+            <svg viewBox="0 0 16 16" fill="currentColor">
+              <path
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/etha.anl?igsh=ZmE5bnJidW93MTV2" target="_blank" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+            </svg>
+          </a>
         </div>
       </div>
     </footer>

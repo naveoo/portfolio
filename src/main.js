@@ -37,6 +37,9 @@ function changeLanguage(lang) {
       label.textContent = 'FR';
     }
   }
+
+  // Update typing effect roles when language changes
+  updateTypingRoles();
 }
 
 const langToggle = document.getElementById('lang-toggle');
@@ -58,21 +61,26 @@ const navbar = document.getElementById('navbar');
 
 hamburger.addEventListener('click', () => {
   navLinks.classList.toggle('nav-open');
+  hamburger.classList.toggle('active');
 });
 
 document.querySelectorAll('.nav-links a').forEach(link => {
   link.addEventListener('click', () => {
     if (window.innerWidth <= 768) {
       navLinks.classList.remove('nav-open');
+      hamburger.classList.remove('active');
     }
   });
 });
 
+// ==========================================
+// NAVBAR SCROLL EFFECT
+// ==========================================
 window.addEventListener('scroll', () => {
   if (window.scrollY > 50) {
-    navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.3)';
+    navbar.classList.add('scrolled');
   } else {
-    navbar.style.boxShadow = 'none';
+    navbar.classList.remove('scrolled');
   }
 });
 
@@ -120,12 +128,74 @@ window.addEventListener('scroll', () => {
 });
 
 // ==========================================
-// PARTICLE CANVAS BACKGROUND
+// TYPING EFFECT
+// ==========================================
+const typingEl = document.getElementById('typing-text');
+let typingRoles = [];
+let roleIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+let typingTimeout = null;
+
+function updateTypingRoles() {
+  const roles = translations[currentLang]?.['hero.roles'];
+  if (roles) {
+    typingRoles = roles;
+  } else {
+    typingRoles = ['Python Developer', 'Web Developer', 'Open Source Enthusiast'];
+  }
+}
+
+updateTypingRoles();
+
+function typeEffect() {
+  if (!typingEl || typingRoles.length === 0) return;
+
+  const currentRole = typingRoles[roleIndex % typingRoles.length];
+
+  if (isDeleting) {
+    charIndex--;
+    typingEl.textContent = currentRole.substring(0, charIndex);
+  } else {
+    charIndex++;
+    typingEl.textContent = currentRole.substring(0, charIndex);
+  }
+
+  let delay = isDeleting ? 40 : 80;
+
+  if (!isDeleting && charIndex === currentRole.length) {
+    delay = 2000; // pause at end
+    isDeleting = true;
+  } else if (isDeleting && charIndex === 0) {
+    isDeleting = false;
+    roleIndex++;
+    delay = 400;
+  }
+
+  typingTimeout = setTimeout(typeEffect, delay);
+}
+
+typeEffect();
+
+// ==========================================
+// INTERACTIVE PARTICLE CANVAS
 // ==========================================
 const canvas = document.getElementById('hero-canvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+
+let mouse = { x: null, y: null, radius: 120 };
+
+canvas.addEventListener('mousemove', (e) => {
+  mouse.x = e.x;
+  mouse.y = e.y;
+});
+
+canvas.addEventListener('mouseleave', () => {
+  mouse.x = null;
+  mouse.y = null;
+});
 
 let particlesArray;
 
@@ -133,17 +203,52 @@ class Particle {
   constructor() {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height;
-    this.size = Math.random() * 2 + 1;
-    this.speedX = Math.random() * 1 - 0.5;
-    this.speedY = Math.random() * 1 - 0.5;
-    this.color = 'rgba(100, 255, 218, 0.2)';
+    this.size = Math.random() * 2 + 0.5;
+    this.baseSpeedX = (Math.random() - 0.5) * 0.6;
+    this.baseSpeedY = (Math.random() - 0.5) * 0.6;
+    this.speedX = this.baseSpeedX;
+    this.speedY = this.baseSpeedY;
+
+    // Random color from palette
+    const colors = [
+      'rgba(100, 255, 218, 0.4)',
+      'rgba(91, 141, 238, 0.3)',
+      'rgba(168, 85, 247, 0.3)',
+      'rgba(100, 255, 218, 0.2)',
+    ];
+    this.color = colors[Math.floor(Math.random() * colors.length)];
   }
+
   update() {
+    // Mouse interaction: push particles away
+    if (mouse.x !== null && mouse.y !== null) {
+      const dx = this.x - mouse.x;
+      const dy = this.y - mouse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < mouse.radius) {
+        const force = (mouse.radius - dist) / mouse.radius;
+        const angle = Math.atan2(dy, dx);
+        this.speedX = this.baseSpeedX + Math.cos(angle) * force * 2;
+        this.speedY = this.baseSpeedY + Math.sin(angle) * force * 2;
+      } else {
+        this.speedX += (this.baseSpeedX - this.speedX) * 0.05;
+        this.speedY += (this.baseSpeedY - this.speedY) * 0.05;
+      }
+    } else {
+      this.speedX += (this.baseSpeedX - this.speedX) * 0.05;
+      this.speedY += (this.baseSpeedY - this.speedY) * 0.05;
+    }
+
     this.x += this.speedX;
     this.y += this.speedY;
-    if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
-    if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+
+    if (this.x > canvas.width) this.x = 0;
+    if (this.x < 0) this.x = canvas.width;
+    if (this.y > canvas.height) this.y = 0;
+    if (this.y < 0) this.y = canvas.height;
   }
+
   draw() {
     ctx.fillStyle = this.color;
     ctx.beginPath();
@@ -154,9 +259,30 @@ class Particle {
 
 function initParticles() {
   particlesArray = [];
-  const numberOfParticles = Math.min((canvas.width * canvas.height) / 9000, 100);
+  const numberOfParticles = Math.min(Math.floor((canvas.width * canvas.height) / 8000), 120);
   for (let i = 0; i < numberOfParticles; i++) {
     particlesArray.push(new Particle());
+  }
+}
+
+function connectParticles() {
+  const maxDist = 130;
+  for (let i = 0; i < particlesArray.length; i++) {
+    for (let j = i + 1; j < particlesArray.length; j++) {
+      const dx = particlesArray[i].x - particlesArray[j].x;
+      const dy = particlesArray[i].y - particlesArray[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < maxDist) {
+        const opacity = 0.12 * (1 - dist / maxDist);
+        ctx.strokeStyle = `rgba(100, 255, 218, ${opacity})`;
+        ctx.lineWidth = 0.6;
+        ctx.beginPath();
+        ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+        ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+        ctx.stroke();
+      }
+    }
   }
 }
 
@@ -166,6 +292,7 @@ function animateParticles() {
     particlesArray[i].update();
     particlesArray[i].draw();
   }
+  connectParticles();
   requestAnimationFrame(animateParticles);
 }
 
@@ -196,11 +323,52 @@ const observer = new IntersectionObserver((entries, obs) => {
   });
 }, observerOptions);
 
-const scrollElements = document.querySelectorAll('.section-title, .skill-category, .about-text');
-scrollElements.forEach((el) => {
+// Observe elements for scroll reveal
+const scrollElements = document.querySelectorAll('.section-title, .section-subtitle, .skill-category, .about-text, .stat-card, .about-stats');
+scrollElements.forEach((el, i) => {
   el.classList.add('hidden');
+  el.style.transitionDelay = `${i * 0.08}s`;
   observer.observe(el);
 });
+
+// ==========================================
+// COUNTER ANIMATION
+// ==========================================
+function animateCounter(el) {
+  const target = parseInt(el.getAttribute('data-count'));
+  const duration = 1500;
+  const start = performance.now();
+
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // Ease out quad
+    const ease = 1 - (1 - progress) * (1 - progress);
+    const current = Math.floor(ease * target);
+    el.textContent = current + '+';
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    }
+  }
+
+  requestAnimationFrame(update);
+}
+
+const counterObserver = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const counters = entry.target.querySelectorAll('[data-count]');
+      counters.forEach(c => animateCounter(c));
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+const statsSection = document.querySelector('.about-stats');
+if (statsSection) {
+  counterObserver.observe(statsSection);
+}
 
 // ==========================================
 // GITHUB REPOS INTEGRATION
@@ -241,8 +409,10 @@ async function fetchGitHubRepos() {
       </article>
     `).join('');
 
-    document.querySelectorAll('.project-card').forEach(card => {
+    // Staggered reveal for project cards
+    document.querySelectorAll('.project-card').forEach((card, i) => {
       card.classList.add('hidden');
+      card.style.transitionDelay = `${i * 0.1}s`;
       observer.observe(card);
     });
 
